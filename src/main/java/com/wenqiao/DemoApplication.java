@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 有自动配置的连接工产ConnectionFactory
  * RabbitmqProperties封装了RabbitMQ配置
  * rabbitTemplate,给java提供了操作模板
+ * rabbitAdmin  rabbit的管理
  */
 @EnableRabbit
 @SpringBootApplication
