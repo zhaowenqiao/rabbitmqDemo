@@ -1,5 +1,6 @@
 package com.wenqiao;
 
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * RabbitmqProperties封装了RabbitMQ配置
  * rabbitTemplate,给java提供了操作模板
  */
+@EnableRabbit
 @SpringBootApplication
 public class DemoApplication {
 
