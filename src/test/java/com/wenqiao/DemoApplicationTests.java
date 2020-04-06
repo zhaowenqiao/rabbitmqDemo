@@ -2,6 +2,11 @@ package com.wenqiao;
 
 import com.wenqiao.config.MQConfig;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +18,34 @@ import java.util.Map;
 class DemoApplicationTests {
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
+	//通过rabbitAdmin来创建 删除queue exchange binging
+	@Autowired
+	private RabbitAdmin rabbitAdmin;
+
+	@Test
+	public void testCreate(){
+		//创建queue
+		rabbitAdmin.declareQueue(new Queue("admin.queue"));
+		//创建direct交换器
+		rabbitAdmin.declareExchange(new DirectExchange("admin.exchange"));
+		//创建binding
+		//String destination, Binding.DestinationType destinationType, String exchange, String routingKey, @Nullable Map<String, Object> arguments
+		rabbitAdmin.declareBinding(new Binding("admin.queue",Binding.DestinationType.QUEUE,"admin.exchange",
+				"admin.routingkey",null));
+	}
+	@Test
+	public void testSend(){
+		Map<String,String> map = new HashMap<>();
+		map.put("name","zhangsan");
+		rabbitTemplate.convertAndSend("admin.exchange","admin.routingkey",map);
+	}
+
+	@Test
+	public void testReceiver(){
+		Object o = rabbitTemplate.receiveAndConvert("admin.queue");
+		System.out.println(o);
+	}
+
 
 	@Test
 	public void sendDirectMessage() {
